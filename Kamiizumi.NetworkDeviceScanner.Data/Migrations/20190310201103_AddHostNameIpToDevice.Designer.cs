@@ -3,14 +3,16 @@ using System;
 using Kamiizumi.NetworkDeviceScanner.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Kamiizumi.NetworkDeviceScanner.Data.Migrations
 {
     [DbContext(typeof(NetworkDeviceScannerContext))]
-    partial class NetworkDeviceScannerContextModelSnapshot : ModelSnapshot
+    [Migration("20190310201103_AddHostNameIpToDevice")]
+    partial class AddHostNameIpToDevice
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

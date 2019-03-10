@@ -59,25 +59,31 @@ namespace Kamiizumi.NetworkDeviceScanner.Web.Services
                             result = xmlSerializer.Deserialize(xmlStream) as nmaprun;
                         }
 
-                        var newHosts = result.Items.OfType<host>().Where(a => a.Items.OfType<address>().Any()).Select(host => new Device()
+                        var discoveredHosts = result.Items.OfType<host>().Where(a => a.Items.OfType<address>().Any()).Select(host => new Device()
                         {
                             MacAddress = host.Items.OfType<address>().Single().addr.Replace(":", ""),
-                            LastSeen = DateTime.Now
+                            LastSeenIp = host.address.addr,
+                            LastSeenHostName = host.Items.OfType<hostnames>().Single().hostname?.FirstOrDefault()?.name,
+                            LastSeenAt = DateTime.Now
                         });
 
                         using (var scope = _scopeFactory.CreateScope())
                         {
                             var context = scope.ServiceProvider.GetRequiredService<NetworkDeviceScannerContext>();
 
-                            foreach (var newHost in newHosts)
+                            foreach (var discoveredHost in discoveredHosts)
                             {
-                                if (context.Devices.AsNoTracking().Any(a => a.MacAddress == newHost.MacAddress))
+                                var existingHost = await context.Devices.FindAsync(discoveredHost.MacAddress);
+
+                                if (existingHost != null)
                                 {
-                                    context.Devices.Update(newHost);
+                                    existingHost.LastSeenIp = discoveredHost.LastSeenIp;
+                                    existingHost.LastSeenHostName = discoveredHost.LastSeenHostName;
+                                    existingHost.LastSeenAt = discoveredHost.LastSeenAt;
                                 }
                                 else
                                 {
-                                    context.Devices.Add(newHost);
+                                    context.Devices.Add(discoveredHost);
                                 }
                             }
 

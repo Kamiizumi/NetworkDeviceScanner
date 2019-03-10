@@ -3,14 +3,16 @@ using System;
 using Kamiizumi.NetworkDeviceScanner.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Kamiizumi.NetworkDeviceScanner.Data.Migrations
 {
     [DbContext(typeof(NetworkDeviceScannerContext))]
-    partial class NetworkDeviceScannerContextModelSnapshot : ModelSnapshot
+    [Migration("20190310195957_RenameLastSeenToLastSeenAt")]
+    partial class RenameLastSeenToLastSeenAt
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,13 +26,6 @@ namespace Kamiizumi.NetworkDeviceScanner.Data.Migrations
 
                     b.Property<DateTimeOffset?>("LastSeenAt")
                         .IsRequired();
-
-                    b.Property<string>("LastSeenHostName")
-                        .HasMaxLength(63);
-
-                    b.Property<string>("LastSeenIp")
-                        .IsRequired()
-                        .HasMaxLength(15);
 
                     b.Property<string>("UserDefinedName")
                         .HasMaxLength(255);
