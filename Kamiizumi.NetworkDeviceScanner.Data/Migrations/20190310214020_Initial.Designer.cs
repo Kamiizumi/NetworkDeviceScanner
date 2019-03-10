@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Kamiizumi.NetworkDeviceScanner.Data.Migrations
 {
     [DbContext(typeof(NetworkDeviceScannerContext))]
-    [Migration("20190310195957_RenameLastSeenToLastSeenAt")]
-    partial class RenameLastSeenToLastSeenAt
+    [Migration("20190310214020_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -27,12 +27,46 @@ namespace Kamiizumi.NetworkDeviceScanner.Data.Migrations
                     b.Property<DateTimeOffset?>("LastSeenAt")
                         .IsRequired();
 
+                    b.Property<string>("LastSeenHostName")
+                        .HasMaxLength(63);
+
+                    b.Property<string>("LastSeenIp")
+                        .IsRequired()
+                        .HasMaxLength(15);
+
+                    b.Property<int?>("ProfileId");
+
                     b.Property<string>("UserDefinedName")
                         .HasMaxLength(255);
 
                     b.HasKey("MacAddress");
 
+                    b.HasIndex("ProfileId");
+
                     b.ToTable("Devices");
+                });
+
+            modelBuilder.Entity("Kamiizumi.NetworkDeviceScanner.Data.Models.Profile", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(30);
+
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("Name");
+
+                    b.ToTable("Profiles");
+                });
+
+            modelBuilder.Entity("Kamiizumi.NetworkDeviceScanner.Data.Models.Device", b =>
+                {
+                    b.HasOne("Kamiizumi.NetworkDeviceScanner.Data.Models.Profile", "Profile")
+                        .WithMany("Devices")
+                        .HasForeignKey("ProfileId");
                 });
 #pragma warning restore 612, 618
         }

@@ -11,5 +11,14 @@ namespace Kamiizumi.NetworkDeviceScanner.Data
         }
 
         public DbSet<Device> Devices { get; set; }
+
+        public DbSet<Profile> Profiles { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder
+                .Entity<Profile>()
+                .HasAlternateKey(profile => profile.Name);
+        }
     }
 }

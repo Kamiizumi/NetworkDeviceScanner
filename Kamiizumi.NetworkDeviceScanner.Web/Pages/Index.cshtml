@@ -21,6 +21,24 @@
 <body>
     <app>@(await Html.RenderComponentAsync<App>())</app>
 
+    <script src="~/lib/jquery/jquery.js"></script>
+    <script src="~/lib/popper.js/popper.js"></script>
+    <script src="~/lib/twitter-bootstrap/js/bootstrap.bundle.js"></script>
+
+    <script>
+        function initAutoFocusOnModalOpen(modalId, inputId) {
+            console.log(modalId);
+            console.log(inputId);
+            $('#' + modalId).on('shown.bs.modal', function () {
+                $('#' + inputId).trigger('focus');
+            });
+        }
+
+        function closeModal(modalId) {
+            $('#' + modalId).modal('hide');
+        }
+    </script>
+
     <script src="_framework/components.server.js"></script>
 </body>
 </html>

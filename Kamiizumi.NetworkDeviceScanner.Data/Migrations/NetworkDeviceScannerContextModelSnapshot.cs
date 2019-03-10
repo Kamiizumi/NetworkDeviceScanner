@@ -32,12 +32,39 @@ namespace Kamiizumi.NetworkDeviceScanner.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(15);
 
+                    b.Property<int?>("ProfileId");
+
                     b.Property<string>("UserDefinedName")
                         .HasMaxLength(255);
 
                     b.HasKey("MacAddress");
 
+                    b.HasIndex("ProfileId");
+
                     b.ToTable("Devices");
+                });
+
+            modelBuilder.Entity("Kamiizumi.NetworkDeviceScanner.Data.Models.Profile", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(30);
+
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("Name");
+
+                    b.ToTable("Profiles");
+                });
+
+            modelBuilder.Entity("Kamiizumi.NetworkDeviceScanner.Data.Models.Device", b =>
+                {
+                    b.HasOne("Kamiizumi.NetworkDeviceScanner.Data.Models.Profile", "Profile")
+                        .WithMany("Devices")
+                        .HasForeignKey("ProfileId");
                 });
 #pragma warning restore 612, 618
         }

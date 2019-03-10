@@ -12,6 +12,7 @@ using Kamiizumi.NetworkDeviceScanner.Web.Components;
 using Kamiizumi.NetworkDeviceScanner.Web.Services;
 using Kamiizumi.NetworkDeviceScanner.Data;
 using Microsoft.EntityFrameworkCore;
+using Kamiizumi.NetworkDeviceScanner.Services;
 
 namespace Kamiizumi.NetworkDeviceScanner.Web
 {
@@ -29,6 +30,7 @@ namespace Kamiizumi.NetworkDeviceScanner.Web
 
             services.AddRazorComponents();
 
+            services.AddScoped<ProfileService>();
             services.AddSingleton<WeatherForecastService>();
 
             services.AddSingleton<IHostedService, DeviceScannerService>();

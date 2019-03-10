@@ -22,5 +22,7 @@ namespace Kamiizumi.NetworkDeviceScanner.Data.Models
 
         [Required]
         public DateTimeOffset? LastSeenAt { get; set; }
+
+        public virtual Profile Profile { get; set; }
     }
 }

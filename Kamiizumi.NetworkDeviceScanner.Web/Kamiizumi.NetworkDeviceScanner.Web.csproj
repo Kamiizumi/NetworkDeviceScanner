@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Kamiizumi.NetworkDeviceScanner.Data\Kamiizumi.NetworkDeviceScanner.Data.csproj" />
+    <ProjectReference Include="..\Kamiizumi.NetworkDeviceScanner.Services\Kamiizumi.NetworkDeviceScanner.Services.csproj" />
   </ItemGroup>
 
 </Project>
