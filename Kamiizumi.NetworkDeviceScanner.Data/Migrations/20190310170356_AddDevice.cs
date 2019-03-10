@@ -1,30 +1,29 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace NetworkDeviceScanner.Migrations
+namespace Kamiizumi.NetworkDeviceScanner.Data.Migrations
 {
-    public partial class Initial : Migration
+    public partial class AddDevice : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "DiscoveredDevices",
+                name: "Devices",
                 columns: table => new
                 {
-                    MacAddress = table.Column<string>(maxLength: 12, nullable: false),
-                    CustomName = table.Column<string>(maxLength: 255, nullable: true),
+                    MacAddress = table.Column<string>(maxLength: 17, nullable: false),
                     LastSeen = table.Column<DateTimeOffset>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DiscoveredDevices", x => x.MacAddress);
+                    table.PrimaryKey("PK_Devices", x => x.MacAddress);
                 });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "DiscoveredDevices");
+                name: "Devices");
         }
     }
 }

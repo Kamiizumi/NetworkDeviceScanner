@@ -1,17 +1,14 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace NetworkDeviceScanner.Models
+namespace Kamiizumi.NetworkDeviceScanner.Data.Models
 {
-    public class DiscoveredDevice
+    public class Device
     {
         [Key]
         [Required]
-        [StringLength(12, MinimumLength = 12)]
+        [MaxLength(17)]
         public string MacAddress { get; set; }
-
-        [MaxLength(255)]
-        public string CustomName { get; set; }
 
         [Required]
         public DateTimeOffset? LastSeen { get; set; }

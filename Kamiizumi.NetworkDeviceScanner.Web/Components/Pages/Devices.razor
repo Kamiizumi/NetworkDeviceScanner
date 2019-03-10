@@ -1,0 +1,51 @@
+﻿@page "/devices"
+@using Kamiizumi.NetworkDeviceScanner.Data.Models
+@inject Kamiizumi.NetworkDeviceScanner.Data.NetworkDeviceScannerContext NetworkDeviceScannerContext
+
+<h1>Devices</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>MAC Address</th>
+            <th>Device</th>
+            <th>Last Seen</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @if (devices == null)
+        {
+            <tr>
+                <td colspan="3">Loading...</td>
+            </tr>
+        }
+        else if (devices.Any() == false)
+        {
+            <tr>
+                <td colspan="3">No devices found</td>
+            </tr>
+        }
+        else
+        {
+            foreach (var device in devices)
+            {
+                <tr>
+                    <td>@device.MacAddress</td>
+                    <td>N/A</td>
+                    <td>@device.LastSeen</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+@functions
+{
+    IEnumerable<Device> devices;
+
+    protected override async Task OnInitAsync()
+    {
+        devices = NetworkDeviceScannerContext.Devices;
+    }
+}

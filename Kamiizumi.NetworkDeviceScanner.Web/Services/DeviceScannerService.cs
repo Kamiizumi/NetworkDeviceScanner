@@ -1,31 +1,36 @@
-﻿using Microsoft.EntityFrameworkCore;
-using NetworkDeviceScanner.Models;
-using NmapXmlParser;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Xml.Serialization;
+using Kamiizumi.NetworkDeviceScanner.Data;
+using Kamiizumi.NetworkDeviceScanner.Data.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using NmapXmlParser;
 
-namespace NetworkDeviceScanner
+namespace Kamiizumi.NetworkDeviceScanner.Web.Services
 {
-    class Program
+    public class DeviceScannerService : BackgroundService
     {
-        private static bool _keepRunning = true;
+        private readonly IServiceScopeFactory _scopeFactory;
 
-        static void Main(string[] args)
+        public DeviceScannerService(IServiceScopeFactory scopeFactory)
         {
-            Console.CancelKeyPress += new ConsoleCancelEventHandler(Console_CancelKeyPress);
+            _scopeFactory = scopeFactory;
+        }
 
-            var contextb = new NetworkDeviceScannerContext();
-            contextb.Database.Migrate();
-
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        {
             var nextRunTime = DateTime.Now;
 
-            while(_keepRunning)
+            while (stoppingToken.IsCancellationRequested == false)
             {
-                if(DateTime.Now >= nextRunTime)
+
+                if (DateTime.Now >= nextRunTime)
                 {
                     using (var nmapProcess = new Process())
                     {
@@ -44,7 +49,7 @@ namespace NetworkDeviceScanner
                         Console.WriteLine("Starting nmap process...");
                         nmapProcess.Start();
 
-                        var xml = nmapProcess.StandardOutput.ReadToEnd();
+                        var xml = await nmapProcess.StandardOutput.ReadToEndAsync();
 
                         var xmlSerializer = new XmlSerializer(typeof(nmaprun));
                         var result = default(nmaprun);
@@ -54,42 +59,38 @@ namespace NetworkDeviceScanner
                             result = xmlSerializer.Deserialize(xmlStream) as nmaprun;
                         }
 
-                        var newHosts = result.Items.OfType<host>().Where(a => a.Items.OfType<address>().Any()).Select(host => new DiscoveredDevice()
+                        var newHosts = result.Items.OfType<host>().Where(a => a.Items.OfType<address>().Any()).Select(host => new Device()
                         {
                             MacAddress = host.Items.OfType<address>().Single().addr.Replace(":", ""),
                             LastSeen = DateTime.Now
                         });
 
-                        var context = new NetworkDeviceScannerContext();
-
-                        foreach (var newHost in newHosts)
+                        using (var scope = _scopeFactory.CreateScope())
                         {
-                            if (context.DiscoveredDevices.AsNoTracking().Any(a => a.MacAddress == newHost.MacAddress))
-                            {
-                                context.DiscoveredDevices.Update(newHost);
-                            }
-                            else
-                            {
-                                context.DiscoveredDevices.Add(newHost);
-                            }
-                        }
+                            var context = scope.ServiceProvider.GetRequiredService<NetworkDeviceScannerContext>();
 
-                        context.SaveChanges();
+                            foreach (var newHost in newHosts)
+                            {
+                                if (context.Devices.AsNoTracking().Any(a => a.MacAddress == newHost.MacAddress))
+                                {
+                                    context.Devices.Update(newHost);
+                                }
+                                else
+                                {
+                                    context.Devices.Add(newHost);
+                                }
+                            }
+
+                            context.SaveChanges();
+                        }
 
                         nextRunTime = DateTime.Now + TimeSpan.FromSeconds(30);
                         Console.WriteLine($"Done. Next run at: {nextRunTime}");
                     }
                 }
 
-                Thread.Sleep(1000);
+                await Task.Delay(1000, stoppingToken);
             }
-        }
-
-        private static void Console_CancelKeyPress(object sender, ConsoleCancelEventArgs e)
-        {
-            Console.WriteLine("Stopping...");
-            e.Cancel = true;
-            _keepRunning = false;
         }
     }
 }
