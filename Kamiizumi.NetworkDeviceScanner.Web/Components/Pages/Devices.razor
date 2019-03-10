@@ -8,7 +8,9 @@
     <thead>
         <tr>
             <th>MAC Address</th>
-            <th>Device</th>
+            <th>User Defined Name</th>
+            <th>Last IP Address</th>
+            <th>Last Host Name</th>
             <th>Last Seen</th>
         </tr>
     </thead>
@@ -17,13 +19,13 @@
         @if (devices == null)
         {
             <tr>
-                <td colspan="3">Loading...</td>
+                <td colspan="5">Loading...</td>
             </tr>
         }
         else if (devices.Any() == false)
         {
             <tr>
-                <td colspan="3">No devices found</td>
+                <td colspan="5">No devices found</td>
             </tr>
         }
         else
@@ -32,8 +34,10 @@
             {
                 <tr>
                     <td>@device.MacAddress</td>
-                    <td>N/A</td>
-                    <td>@device.LastSeen</td>
+                    <td>@device.UserDefinedName</td>
+                    <td>@device.LastSeenIp</td>
+                    <td>@device.LastSeenHostName</td>
+                    <td>@device.LastSeenAt</td>
                 </tr>
             }
         }
@@ -46,6 +50,6 @@
 
     protected override async Task OnInitAsync()
     {
-        devices = NetworkDeviceScannerContext.Devices;
+        devices = NetworkDeviceScannerContext.Devices.OrderBy(a => a.UserDefinedName);
     }
 }
