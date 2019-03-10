@@ -27,6 +27,7 @@ namespace Kamiizumi.NetworkDeviceScanner.Services
             };
 
             await _networkDeviceScannerContext.Profiles.AddAsync(profile);
+            await _networkDeviceScannerContext.SaveChangesAsync();
 
             return profile;
         }
