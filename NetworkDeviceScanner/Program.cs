@@ -16,71 +16,79 @@ namespace NetworkDeviceScanner
 
         static void Main(string[] args)
         {
-            Console.CancelKeyPress += Console_CancelKeyPress;
+            Console.CancelKeyPress += new ConsoleCancelEventHandler(Console_CancelKeyPress);
+
+            var contextb = new NetworkDeviceScannerContext();
+            contextb.Database.Migrate();
+
+            var nextRunTime = DateTime.Now;
 
             while(_keepRunning)
             {
-                using (var nmapProcess = new Process())
+                if(DateTime.Now >= nextRunTime)
                 {
-                    // Configure the executable / arguments to start.
-                    nmapProcess.StartInfo.FileName = "nmap";
-                    nmapProcess.StartInfo.Arguments = "-sn 192.168.0.0/24 -oX -";
-
-                    // We want to handle the process internally so don't start via the OS.
-                    nmapProcess.StartInfo.UseShellExecute = false;
-
-                    // Redirect output so we can process readings / errors.
-                    nmapProcess.StartInfo.RedirectStandardOutput = true;
-                    nmapProcess.StartInfo.RedirectStandardError = false;
-
-                    // Begin the process and start listening to output.
-                    Console.WriteLine("Starting nmap process...");
-                    nmapProcess.Start();
-                    
-                    var xml = nmapProcess.StandardOutput.ReadToEnd();
-
-                    var xmlSerializer = new XmlSerializer(typeof(nmaprun));
-                    var result = default(nmaprun);
-
-                    using (var xmlStream = new StringReader(xml))
+                    using (var nmapProcess = new Process())
                     {
-                        result = xmlSerializer.Deserialize(xmlStream) as nmaprun;
-                    }
+                        // Configure the executable / arguments to start.
+                        nmapProcess.StartInfo.FileName = "nmap";
+                        nmapProcess.StartInfo.Arguments = "-sn 192.168.0.0/24 -oX -";
 
-                    var newHosts = result.Items.OfType<host>().Where(a => a.Items.OfType<address>().Any()).Select(host => new DiscoveredDevice()
-                    {
-                        MacAddress = host.Items.OfType<address>().Single().addr.Replace(":", ""),
-                        LastSeen = DateTime.Now
-                    });
+                        // We want to handle the process internally so don't start via the OS.
+                        nmapProcess.StartInfo.UseShellExecute = false;
 
-                    var context = new NetworkDeviceScannerContext();
+                        // Redirect output so we can process readings / errors.
+                        nmapProcess.StartInfo.RedirectStandardOutput = true;
+                        nmapProcess.StartInfo.RedirectStandardError = false;
 
-                    foreach (var newHost in newHosts)
-                    {
-                        if(context.DiscoveredDevices.AsNoTracking().Any(a => a.MacAddress == newHost.MacAddress))
+                        // Begin the process and start listening to output.
+                        Console.WriteLine("Starting nmap process...");
+                        nmapProcess.Start();
+
+                        var xml = nmapProcess.StandardOutput.ReadToEnd();
+
+                        var xmlSerializer = new XmlSerializer(typeof(nmaprun));
+                        var result = default(nmaprun);
+
+                        using (var xmlStream = new StringReader(xml))
                         {
-                            context.DiscoveredDevices.Update(newHost);
+                            result = xmlSerializer.Deserialize(xmlStream) as nmaprun;
                         }
-                        else
-                        {
-                            context.DiscoveredDevices.Add(newHost);
-                        }
-                    }
 
-                    context.SaveChanges();
-                    
-                    Console.WriteLine(result.args);
+                        var newHosts = result.Items.OfType<host>().Where(a => a.Items.OfType<address>().Any()).Select(host => new DiscoveredDevice()
+                        {
+                            MacAddress = host.Items.OfType<address>().Single().addr.Replace(":", ""),
+                            LastSeen = DateTime.Now
+                        });
+
+                        var context = new NetworkDeviceScannerContext();
+
+                        foreach (var newHost in newHosts)
+                        {
+                            if (context.DiscoveredDevices.AsNoTracking().Any(a => a.MacAddress == newHost.MacAddress))
+                            {
+                                context.DiscoveredDevices.Update(newHost);
+                            }
+                            else
+                            {
+                                context.DiscoveredDevices.Add(newHost);
+                            }
+                        }
+
+                        context.SaveChanges();
+
+                        nextRunTime = DateTime.Now + TimeSpan.FromSeconds(30);
+                        Console.WriteLine($"Done. Next run at: {nextRunTime}");
+                    }
                 }
 
-                Thread.Sleep(30000);
+                Thread.Sleep(1000);
             }
-
-            Console.ReadKey();
         }
 
         private static void Console_CancelKeyPress(object sender, ConsoleCancelEventArgs e)
         {
             Console.WriteLine("Stopping...");
+            e.Cancel = true;
             _keepRunning = false;
         }
     }

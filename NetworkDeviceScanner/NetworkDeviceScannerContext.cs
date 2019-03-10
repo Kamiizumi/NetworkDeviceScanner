@@ -9,7 +9,7 @@ namespace NetworkDeviceScanner
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite("Data Source=C:\\Temp\\NetworkDeviceScanner.db");
+            optionsBuilder.UseSqlite("Data Source=NetworkDeviceScanner.db");
         }
     }
 }
