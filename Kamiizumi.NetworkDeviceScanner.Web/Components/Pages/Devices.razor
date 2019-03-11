@@ -1,5 +1,6 @@
 ﻿@page "/devices"
 @using Kamiizumi.NetworkDeviceScanner.Data.Models
+@using Microsoft.EntityFrameworkCore
 @inject Kamiizumi.NetworkDeviceScanner.Data.NetworkDeviceScannerContext NetworkDeviceScannerContext
 
 <h1>Devices</h1>
@@ -8,6 +9,7 @@
     <thead>
         <tr>
             <th>MAC Address</th>
+            <th>Profile</th>
             <th>User Defined Name</th>
             <th>Last IP Address</th>
             <th>Last Host Name</th>
@@ -34,6 +36,19 @@
             {
                 <tr>
                     <td>@device.MacAddress</td>
+                    <td>
+                        <select class="form-control" onchange="@((e) => SetProfile(e, device.MacAddress))">
+                            <option></option>
+                            @foreach(var profile in NetworkDeviceScannerContext.Profiles)
+                            {
+                                var isSelected = device.Profile?.Id == profile.Id;
+
+                                <option value="@profile.Id" selected="@isSelected">
+                                    @profile.Name
+                                </option>
+                            }
+                        </select>
+                    </td>
                     <td>@device.UserDefinedName</td>
                     <td>@device.LastSeenIp</td>
                     <td>@device.LastSeenHostName</td>
@@ -50,6 +65,11 @@
 
     protected override async Task OnInitAsync()
     {
-        devices = NetworkDeviceScannerContext.Devices.OrderBy(a => a.UserDefinedName);
+        devices = NetworkDeviceScannerContext.Devices.Include(a => a.Profile).OrderBy(a => a.UserDefinedName);
+    }
+
+    private void SetProfile(UIChangeEventArgs ev, string macAddress)
+    {
+        DeviceService.SetProfile(macAddress, Convert.ToInt32(ev.Value));
     }
 }
