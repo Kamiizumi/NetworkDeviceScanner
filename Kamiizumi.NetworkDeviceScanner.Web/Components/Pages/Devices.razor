@@ -40,7 +40,7 @@
                     <td>
                         <select class="form-control" onchange="@((e) => SetProfile(e, device.MacAddress))">
                             <option></option>
-                            @foreach(var profile in NetworkDeviceScannerContext.Profiles)
+                            @foreach(var profile in NetworkDeviceScannerContext.Profiles.OrderBy(profile => profile.Name))
                             {
                                 var isSelected = device.Profile?.Id == profile.Id;
 
