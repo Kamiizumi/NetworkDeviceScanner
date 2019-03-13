@@ -1,6 +1,7 @@
 ﻿using Kamiizumi.NetworkDeviceScanner.Data;
 using Kamiizumi.NetworkDeviceScanner.Data.Models;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Kamiizumi.NetworkDeviceScanner.Services
@@ -30,6 +31,11 @@ namespace Kamiizumi.NetworkDeviceScanner.Services
             await _networkDeviceScannerContext.SaveChangesAsync();
 
             return profile;
+        }
+
+        public IQueryable<Profile> Get()
+        {
+            return _networkDeviceScannerContext.Profiles;
         }
     }
 }

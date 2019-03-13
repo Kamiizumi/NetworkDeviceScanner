@@ -1,5 +1,31 @@
 ﻿@page "/profiles"
+@inherits Kamiizumi.NetworkDeviceScanner.Web.Components.Profiles.ProfileTableComponent
 
 <h1>Profiles</h1>
 
 <ProfileCreateModal />
+
+<div class="container">
+
+    <div class="card">
+        <ul class="list-group list-group-flush">
+            @foreach (var profile in _profileTableVms)
+            {
+                <li class="list-group-item">
+                    <div class="d-flex justify-content-between w-100">
+                        <div class="media">
+                            <div class="align-self-center rounded-circle mr-3 bg-secondary" style="width: 64px; height: 64px;"></div>
+                            
+                            <div class="media-body">
+                                <h5 class="mt-1">@profile.Name</h5>
+                                <p class="mb-0">@profile.DeviceCount device(s)</p>
+                            </div>
+                        </div>
+
+                        <p><button class="btn btn-danger">Delete</button></p>
+                    </div>
+                </li>
+            }
+        </ul>
+    </div>
+</div>
