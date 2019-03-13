@@ -31,6 +31,7 @@ namespace Kamiizumi.NetworkDeviceScanner.Web
             services.AddRazorComponents();
 
             services.AddScoped<ProfileService>();
+            services.AddScoped<DeviceService>();
             services.AddSingleton<WeatherForecastService>();
 
             services.AddSingleton<IHostedService, DeviceScannerService>();
