@@ -6,26 +6,29 @@
 <p><ProfileCreateModal /></p>
 
 <div class="container">
+    <div class="row justify-content-md-center">
+        <div class="col col-md-10">
+            <div class="card">
+                <ul class="list-group list-group-flush">
+                    @foreach (var profile in _profileTableVms)
+                    {
+                        <li class="list-group-item">
+                            <div class="d-flex justify-content-between w-100">
+                                <div class="media">
+                                    <i class="align-self-center mr-3 text-secondary fas fa-user-circle" style="font-size: 4rem;"></i>
 
-    <div class="card">
-        <ul class="list-group list-group-flush">
-            @foreach (var profile in _profileTableVms)
-            {
-                <li class="list-group-item">
-                    <div class="d-flex justify-content-between w-100">
-                        <div class="media">
-                            <i class="align-self-center mr-3 text-secondary fas fa-user-circle" style="font-size: 4rem;"></i>
-                            
-                            <div class="media-body">
-                                <h5 class="mt-1">@profile.Name</h5>
-                                <p class="mb-0">@profile.DeviceCount device(s)</p>
+                                    <div class="media-body">
+                                        <h5 class="mt-1">@profile.Name</h5>
+                                        <p class="mb-0">@profile.DeviceCount device(s)</p>
+                                    </div>
+                                </div>
+
+                                <p class="align-self-center mb-0"><button class="btn btn-danger">Delete</button></p>
                             </div>
-                        </div>
-
-                        <p class="align-self-center mb-0"><button class="btn btn-danger">Delete</button></p>
-                    </div>
-                </li>
-            }
-        </ul>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
     </div>
 </div>
