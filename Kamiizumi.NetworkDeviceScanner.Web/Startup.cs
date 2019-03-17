@@ -58,6 +58,16 @@ namespace Kamiizumi.NetworkDeviceScanner.Web
                 routes.MapRazorPages();
                 routes.MapComponentHub<App>("app");
             });
+
+            using (var serviceScope = app.ApplicationServices
+                .GetRequiredService<IServiceScopeFactory>()
+                .CreateScope())
+            {
+                using (var context = serviceScope.ServiceProvider.GetService<NetworkDeviceScannerContext>())
+                {
+                    context.Database.Migrate();
+                }
+            }
         }
     }
 }
