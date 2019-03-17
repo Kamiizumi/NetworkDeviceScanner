@@ -36,7 +36,7 @@ namespace Kamiizumi.NetworkDeviceScanner.Web.Services
                     {
                         // Configure the executable / arguments to start.
                         nmapProcess.StartInfo.FileName = "nmap";
-                        nmapProcess.StartInfo.Arguments = "-sn 192.168.0.0/24 -oX -";
+                        nmapProcess.StartInfo.Arguments = "-sn 10.0.0.0/24 -oX -";
 
                         // We want to handle the process internally so don't start via the OS.
                         nmapProcess.StartInfo.UseShellExecute = false;

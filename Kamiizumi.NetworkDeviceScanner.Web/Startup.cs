@@ -1,11 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Kamiizumi.NetworkDeviceScanner.Web.Components;
@@ -32,7 +26,6 @@ namespace Kamiizumi.NetworkDeviceScanner.Web
 
             services.AddScoped<ProfileService>();
             services.AddScoped<DeviceService>();
-            services.AddSingleton<WeatherForecastService>();
 
             services.AddSingleton<IHostedService, DeviceScannerService>();
         }
