@@ -33,7 +33,7 @@
         /// <param name="modelBuilder">Builder to configure.</param>
         /// <remarks>
         /// Annotations should be preferred over this method.
-        /// The fluent API should be used only if a Annotation equivalant does not exist.
+        /// The fluent API should be used only if a annotation equivalent does not exist.
         /// </remarks>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

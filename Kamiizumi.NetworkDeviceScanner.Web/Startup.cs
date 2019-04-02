@@ -16,7 +16,7 @@
     public class Startup
     {
         /// <summary>
-        /// Configures services used throught the application.
+        /// Configures services used throughout the application.
         /// </summary>
         /// <param name="services">Collection of configured services.</param>
         /// <remarks>

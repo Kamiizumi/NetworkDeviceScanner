@@ -56,7 +56,7 @@
         }
 
         /// <summary>
-        /// Deletes a profile, also unassigning the profile from any assigned devices.
+        /// Deletes a profile, also removing the profile from any assigned devices.
         /// </summary>
         /// <param name="profileId">Database ID of the profile to delete.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>

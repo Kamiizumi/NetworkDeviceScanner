@@ -33,7 +33,7 @@
         /// <summary>
         /// Executes the background service.
         /// </summary>
-        /// <param name="stoppingToken">Token to check if the serivce has been asked to stop.</param>
+        /// <param name="stoppingToken">Token to check if the service has been asked to stop.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
