@@ -1,35 +1,46 @@
-﻿using System;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
-using Kamiizumi.NetworkDeviceScanner.Data;
-using Kamiizumi.NetworkDeviceScanner.Data.Models;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using NmapXmlParser;
-
-namespace Kamiizumi.NetworkDeviceScanner.Web.Services
+﻿namespace Kamiizumi.NetworkDeviceScanner.Web.Services
 {
+    using System;
+    using System.Diagnostics;
+    using System.IO;
+    using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using System.Xml.Serialization;
+    using Kamiizumi.NetworkDeviceScanner.Data;
+    using Kamiizumi.NetworkDeviceScanner.Data.Models;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
+    using NmapXmlParser;
+
+    /// <summary>
+    /// Service for discovering devices on a network.
+    /// </summary>
     public class DeviceScannerService : BackgroundService
     {
         private readonly IServiceScopeFactory _scopeFactory;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DeviceScannerService"/> class.
+        /// </summary>
+        /// <param name="scopeFactory">Factory for getting services.</param>
         public DeviceScannerService(IServiceScopeFactory scopeFactory)
         {
             _scopeFactory = scopeFactory;
         }
 
+        /// <summary>
+        /// Executes the background service.
+        /// </summary>
+        /// <param name="stoppingToken">Token to check if the service has been asked to stop.</param>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             var nextRunTime = DateTime.Now;
 
             while (stoppingToken.IsCancellationRequested == false)
             {
-
                 if (DateTime.Now >= nextRunTime)
                 {
                     using (var nmapProcess = new Process())
@@ -61,10 +72,10 @@ namespace Kamiizumi.NetworkDeviceScanner.Web.Services
 
                         var discoveredHosts = result.Items.OfType<host>().Where(a => a.Items.OfType<address>().Any()).Select(host => new Device()
                         {
-                            MacAddress = host.Items.OfType<address>().Single().addr.Replace(":", ""),
+                            MacAddress = host.Items.OfType<address>().Single().addr.Replace(":", string.Empty),
                             LastSeenIp = host.address.addr,
                             LastSeenHostName = host.Items.OfType<hostnames>().Single().hostname?.FirstOrDefault()?.name,
-                            LastSeenAt = DateTime.Now
+                            LastSeenAt = DateTime.Now,
                         });
 
                         using (var scope = _scopeFactory.CreateScope())

@@ -1,19 +1,28 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Kamiizumi.NetworkDeviceScanner.Web.Components;
-using Kamiizumi.NetworkDeviceScanner.Web.Services;
-using Kamiizumi.NetworkDeviceScanner.Data;
-using Microsoft.EntityFrameworkCore;
-using Kamiizumi.NetworkDeviceScanner.Services;
-
-namespace Kamiizumi.NetworkDeviceScanner.Web
+﻿namespace Kamiizumi.NetworkDeviceScanner.Web
 {
+    using Kamiizumi.NetworkDeviceScanner.Data;
+    using Kamiizumi.NetworkDeviceScanner.Services;
+    using Kamiizumi.NetworkDeviceScanner.Web.Components;
+    using Kamiizumi.NetworkDeviceScanner.Web.Services;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
+
+    /// <summary>
+    /// Initialises and configures the web application.
+    /// </summary>
     public class Startup
     {
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+        /// <summary>
+        /// Configures services used throughout the application.
+        /// </summary>
+        /// <param name="services">Collection of configured services.</param>
+        /// <remarks>
+        /// This method gets called by the runtime. Use this method to add services to the container.
+        /// For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940.
+        /// </remarks>
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<NetworkDeviceScannerContext>(options =>
@@ -30,7 +39,12 @@ namespace Kamiizumi.NetworkDeviceScanner.Web
             services.AddSingleton<IHostedService, DeviceScannerService>();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// <summary>
+        /// Configures the application.
+        /// </summary>
+        /// <param name="app">Application builder.</param>
+        /// <param name="env">Hosting environment.</param>
+        /// <remarks>This method gets called by the runtime. Use this method to configure the HTTP request pipeline.</remarks>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
