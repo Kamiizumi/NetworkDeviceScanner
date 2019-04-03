@@ -68,7 +68,7 @@
 
     protected override async Task OnInitAsync()
     {
-        devices = NetworkDeviceScannerContext.Devices.Include(a => a.Profile).OrderBy(a => a.UserDefinedName);
+        devices = NetworkDeviceScannerContext.Devices.Include(a => a.Profile).OrderByDescending(a => a.LastSeenAt);
     }
 
     private void SetProfile(UIChangeEventArgs ev, string macAddress)
