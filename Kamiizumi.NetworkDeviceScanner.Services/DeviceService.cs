@@ -35,5 +35,27 @@
 
             await _context.SaveChangesAsync();
         }
+
+        /// <summary>
+        /// Sets the user defined name of a device.
+        /// </summary>
+        /// <param name="macAddress">MAC address of the device to update.</param>
+        /// <param name="userDefinedName">User defined name to use.</param>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+        public async Task SetUserDefinedName(string macAddress, string userDefinedName)
+        {
+            var device = await _context.Devices.FindAsync(macAddress);
+
+            if (string.IsNullOrWhiteSpace(userDefinedName))
+            {
+                device.UserDefinedName = null;
+            }
+            else
+            {
+                device.UserDefinedName = userDefinedName.Trim();
+            }
+
+            await _context.SaveChangesAsync();
+        }
     }
 }

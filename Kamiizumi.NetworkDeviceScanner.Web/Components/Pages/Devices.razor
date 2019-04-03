@@ -50,7 +50,9 @@
                             }
                         </select>
                     </td>
-                    <td>@device.UserDefinedName</td>
+                    <td>
+                        <input class="form-control" type="text" maxlength="255" value="@device.UserDefinedName" onchange="@((e) => SetName(e, device.MacAddress))" />
+                    </td>
                     <td>@device.LastSeenIp</td>
                     <td>@device.LastSeenHostName</td>
                     <td>@device.LastSeenAt</td>
@@ -72,5 +74,10 @@
     private void SetProfile(UIChangeEventArgs ev, string macAddress)
     {
         DeviceService.SetProfile(macAddress, Convert.ToInt32(ev.Value));
+    }
+
+    private void SetName(UIChangeEventArgs ev, string macAddress)
+    {
+        DeviceService.SetUserDefinedName(macAddress, ev.Value.ToString());
     }
 }
