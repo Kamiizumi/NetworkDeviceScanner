@@ -36,7 +36,15 @@
             foreach (var device in devices)
             {
                 <tr>
-                    <td>@device.MacAddress</td>
+                    <td>
+                        @string.Format("{0}:{1}:{2}:{3}:{4}:{5}",
+                            device.MacAddress.Substring(0, 2),
+                            device.MacAddress.Substring(2, 2),
+                            device.MacAddress.Substring(4, 2),
+                            device.MacAddress.Substring(6, 2),
+                            device.MacAddress.Substring(8, 2),
+                            device.MacAddress.Substring(10, 2))
+                    </td>
                     <td>
                         <select class="form-control" onchange="@((e) => SetProfile(e, device.MacAddress))">
                             <option></option>
