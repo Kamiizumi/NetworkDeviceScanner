@@ -1,1 +1,4 @@
-﻿
+﻿.nav-link > .fas
+{
+    width: 1rem;
+}
