@@ -1,0 +1,36 @@
+﻿@inherits Kamiizumi.NetworkDeviceScanner.Web.Components.Devices.DeviceCardComponent
+@using Humanizer
+
+<div class="card shadow">
+    <div class="card-body">
+        <h5 class="card-title mb-2 @(UserDefinedNameSet == false ? "text-muted" : string.Empty)">
+            @(UserDefinedNameSet ? DeviceCardVm?.UserDefinedName : DeviceCardVm?.LastSeenHostName)
+        </h5>
+        <h6 class="card-subtitle mb-3 @(ProfileSet == false ? "text-muted" : string.Empty)">
+            @(ProfileSet ? DeviceCardVm?.ProfileName : "No profile assigned")
+        </h6>
+
+        <div class="row device-card-details">
+            <div class="col-lg-6">
+                <i title="Last seen" class="fas fa-clock"></i>
+                <abbr title="@DeviceCardVm?.LastSeenAt">@DeviceCardVm?.LastSeenAt.Humanize()</abbr>
+            </div>
+            <div class="col-lg-6 @(HostNameSeen == false ? "text-muted" : string.Empty)">
+                <i title="Last seen host name" class="fas fa-tag"></i>
+                @(HostNameSeen ? DeviceCardVm?.LastSeenHostName : "No host name seen")
+            </div>
+
+            <div class="col-lg-6"><i title="Last seen IPv4 address" class="fas fa-grip-horizontal"></i> @DeviceCardVm?.LastSeenIp</div>
+            <div class="col-lg-6">
+                <i title="MAC address" class="fas fa-ethernet"></i>
+                @string.Format("{0}:{1}:{2}:{3}:{4}:{5}",
+                    DeviceCardVm?.MacAddress.Substring(0, 2),
+                    DeviceCardVm?.MacAddress.Substring(2, 2),
+                    DeviceCardVm?.MacAddress.Substring(4, 2),
+                    DeviceCardVm?.MacAddress.Substring(6, 2),
+                    DeviceCardVm?.MacAddress.Substring(8, 2),
+                    DeviceCardVm?.MacAddress.Substring(10, 2))
+            </div>
+        </div>
+    </div>
+</div>

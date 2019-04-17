@@ -1,0 +1,29 @@
+﻿@page "/devices"
+@using Kamiizumi.NetworkDeviceScanner.Data.Models
+@using Microsoft.EntityFrameworkCore
+@inject Kamiizumi.NetworkDeviceScanner.Data.NetworkDeviceScannerContext NetworkDeviceScannerContext
+
+<h1>Devices</h1>
+
+<div class="card-columns device-card-columns">
+    @foreach (var device in devices)
+    {
+        <DeviceCard MacAddress="@device.MacAddress" />
+    }
+</div>
+
+<div class="row">
+    <p class="col-12 text-right">
+        <NavLink class="btn btn-secondary" href="devicesTable">View as table (Deprecated)</NavLink>
+    </p>
+</div>
+
+@functions
+{
+    IEnumerable<Device> devices;
+
+    protected override async Task OnInitAsync()
+    {
+        devices = NetworkDeviceScannerContext.Devices.Include(a => a.Profile).OrderByDescending(a => a.LastSeenAt);
+    }
+}

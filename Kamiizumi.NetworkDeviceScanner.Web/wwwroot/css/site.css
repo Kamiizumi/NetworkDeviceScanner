@@ -1,4 +1,21 @@
-﻿.nav-link > .fas
-{
+﻿.nav-link > .fas {
+    /* Set fixed width on FontAwesome icons in NavLinks to ensure text lines up correctly. */
     width: 1rem;
+}
+
+.device-card-details .fas {
+    width: 1.2rem;
+}
+
+/* Overrides for bootstrap card columns when showing device cards */
+@media (min-width: 576px) {
+    .device-card-columns {
+        column-count: 1;
+    }
+}
+
+@media (min-width: 768px) {
+    .device-card-columns {
+        column-count: 2;
+    }
 }
