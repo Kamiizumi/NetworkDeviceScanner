@@ -50,6 +50,7 @@
                 .Where(device => device.MacAddress == MacAddress)
                 .Select(device => new DeviceCardVm
                 {
+                    MacAddress = device.MacAddress,
                     UserDefinedName = device.UserDefinedName,
                     ProfileName = device.Profile.Name,
                     LastSeenAt = device.LastSeenAt,

@@ -8,6 +8,11 @@
     public class DeviceCardVm
     {
         /// <summary>
+        /// Gets or sets the MAC address of the device.
+        /// </summary>
+        public string MacAddress { get; set; }
+
+        /// <summary>
         /// Gets or sets the user defined name for the device.
         /// </summary>
         public string UserDefinedName { get; set; }
