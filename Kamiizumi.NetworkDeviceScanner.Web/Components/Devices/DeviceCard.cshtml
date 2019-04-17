@@ -10,15 +10,22 @@
             @(ProfileSet ? DeviceCardVm?.ProfileName : "No profile assigned")
         </h6>
 
-        <dl class="row mb-0">
-            <dt class="col-sm-2"><i class="fas fa-clock"></i></dt>
-            <dd class="col-sm-10 mb-1">@DeviceCardVm?.LastSeenAt.Humanize()</dd>
+        <div class="row device-card-details">
+            <div class="col-lg-6"><i class="fas fa-clock"></i> @DeviceCardVm?.LastSeenAt.Humanize()</div>
+            <div class="col-lg-6"><i class="fas fa-tag"></i> @DeviceCardVm?.LastSeenHostName</div>
 
-            <dt class="col-sm-2"><i class="fas fa-grip-horizontal"></i></dt>
-            <dd class="col-sm-10 mb-1">@DeviceCardVm?.LastSeenIp</dd>
+            <div class="col-lg-6"><i class="fas fa-grip-horizontal"></i> @DeviceCardVm?.LastSeenIp</div>
+        </div>
 
-            <dt class="col-sm-2"><i class="fas fa-tag"></i></dt>
-            <dd class="col-sm-10 mb-0">@DeviceCardVm?.LastSeenHostName</dd>
-        </dl>
+        @*<dl class="row mb-0">
+            <dt class="col-sm-1"><i class="fas fa-clock"></i></dt>
+            <dd class="col-sm-11 mb-1">@DeviceCardVm?.LastSeenAt.Humanize()</dd>
+
+            <dt class="col-sm-1"><i class="fas fa-grip-horizontal"></i></dt>
+            <dd class="col-sm-11 mb-1">@DeviceCardVm?.LastSeenIp</dd>
+
+            <dt class="col-sm-1"><i class="fas fa-tag"></i></dt>
+            <dd class="col-sm-11 mb-0">@DeviceCardVm?.LastSeenHostName</dd>
+        </dl>*@
     </div>
 </div>
