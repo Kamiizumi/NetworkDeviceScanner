@@ -1,0 +1,92 @@
+﻿@page "/devicesTable"
+@using Kamiizumi.NetworkDeviceScanner.Data.Models
+@using Microsoft.EntityFrameworkCore
+@inject Kamiizumi.NetworkDeviceScanner.Data.NetworkDeviceScannerContext NetworkDeviceScannerContext
+@inject Kamiizumi.NetworkDeviceScanner.Services.DeviceService DeviceService
+
+@* TODO: Remove this view once all functionality has been replicated by new /devices view. *@
+<h1>Devices Table (Deprecated)</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>MAC Address</th>
+            <th>Profile</th>
+            <th>User Defined Name</th>
+            <th>Last IP Address</th>
+            <th>Last Host Name</th>
+            <th>Last Seen</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @if (devices == null)
+        {
+            <tr>
+                <td colspan="5">Loading...</td>
+            </tr>
+        }
+        else if (devices.Any() == false)
+        {
+            <tr>
+                <td colspan="5">No devices found</td>
+            </tr>
+        }
+        else
+        {
+            foreach (var device in devices)
+            {
+                <tr>
+                    <td>
+                        @string.Format("{0}:{1}:{2}:{3}:{4}:{5}",
+                            device.MacAddress.Substring(0, 2),
+                            device.MacAddress.Substring(2, 2),
+                            device.MacAddress.Substring(4, 2),
+                            device.MacAddress.Substring(6, 2),
+                            device.MacAddress.Substring(8, 2),
+                            device.MacAddress.Substring(10, 2))
+                    </td>
+                    <td>
+                        <select class="form-control" onchange="@((e) => SetProfile(e, device.MacAddress))">
+                            <option></option>
+                            @foreach(var profile in NetworkDeviceScannerContext.Profiles.OrderBy(profile => profile.Name))
+                            {
+                                var isSelected = device.Profile?.Id == profile.Id;
+
+                                <option value="@profile.Id" selected="@isSelected">
+                                    @profile.Name
+                                </option>
+                            }
+                        </select>
+                    </td>
+                    <td>
+                        <input class="form-control" type="text" maxlength="255" value="@device.UserDefinedName" onchange="@((e) => SetName(e, device.MacAddress))" />
+                    </td>
+                    <td>@device.LastSeenIp</td>
+                    <td>@device.LastSeenHostName</td>
+                    <td>@device.LastSeenAt</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+@functions
+{
+    IEnumerable<Device> devices;
+
+    protected override async Task OnInitAsync()
+    {
+        devices = NetworkDeviceScannerContext.Devices.Include(a => a.Profile).OrderByDescending(a => a.LastSeenAt);
+    }
+
+    private void SetProfile(UIChangeEventArgs ev, string macAddress)
+    {
+        DeviceService.SetProfile(macAddress, Convert.ToInt32(ev.Value));
+    }
+
+    private void SetName(UIChangeEventArgs ev, string macAddress)
+    {
+        DeviceService.SetUserDefinedName(macAddress, ev.Value.ToString());
+    }
+}
