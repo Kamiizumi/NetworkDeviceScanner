@@ -39,6 +39,11 @@
         protected bool ProfileSet => DeviceCardVm.ProfileName != null;
 
         /// <summary>
+        /// Gets a value indicating whether the device has been seen with a host name.
+        /// </summary>
+        protected bool HostNameSeen => DeviceCardVm.LastSeenHostName != null;
+
+        /// <summary>
         /// Prepares the component.
         /// </summary>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
