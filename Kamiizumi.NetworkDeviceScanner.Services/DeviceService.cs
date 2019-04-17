@@ -1,5 +1,6 @@
 ﻿namespace Kamiizumi.NetworkDeviceScanner.Services
 {
+    using System.Linq;
     using System.Threading.Tasks;
     using Kamiizumi.NetworkDeviceScanner.Data;
     using Kamiizumi.NetworkDeviceScanner.Data.Models;
@@ -18,6 +19,15 @@
         public DeviceService(NetworkDeviceScannerContext context)
         {
             _context = context;
+        }
+
+        /// <summary>
+        /// Gets a queryable of all devices.
+        /// </summary>
+        /// <returns>Queryable of devices.</returns>
+        public IQueryable<Device> Get()
+        {
+            return _context.Devices;
         }
 
         /// <summary>
