@@ -11,7 +11,10 @@
         </h6>
 
         <div class="row device-card-details">
-            <div class="col-lg-6"><i class="fas fa-clock"></i> @DeviceCardVm?.LastSeenAt.Humanize()</div>
+            <div class="col-lg-6">
+                <i class="fas fa-clock"></i>
+                <abbr title="@DeviceCardVm?.LastSeenAt">@DeviceCardVm?.LastSeenAt.Humanize()</abbr>
+            </div>
             <div class="col-lg-6 @(HostNameSeen == false ? "text-muted" : string.Empty)">
                 <i class="fas fa-tag"></i>
                 @(HostNameSeen ? DeviceCardVm?.LastSeenHostName : "No host name seen")
