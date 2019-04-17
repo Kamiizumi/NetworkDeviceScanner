@@ -21,7 +21,16 @@
             </div>
 
             <div class="col-lg-6"><i title="Last seen IPv4 address" class="fas fa-grip-horizontal"></i> @DeviceCardVm?.LastSeenIp</div>
-            <div class="col-lg-6"><i title="MAC address" class="fas fa-ethernet"></i> @DeviceCardVm?.MacAddress</div>
+            <div class="col-lg-6">
+                <i title="MAC address" class="fas fa-ethernet"></i>
+                @string.Format("{0}:{1}:{2}:{3}:{4}:{5}",
+                    DeviceCardVm?.MacAddress.Substring(0, 2),
+                    DeviceCardVm?.MacAddress.Substring(2, 2),
+                    DeviceCardVm?.MacAddress.Substring(4, 2),
+                    DeviceCardVm?.MacAddress.Substring(6, 2),
+                    DeviceCardVm?.MacAddress.Substring(8, 2),
+                    DeviceCardVm?.MacAddress.Substring(10, 2))
+            </div>
         </div>
     </div>
 </div>
