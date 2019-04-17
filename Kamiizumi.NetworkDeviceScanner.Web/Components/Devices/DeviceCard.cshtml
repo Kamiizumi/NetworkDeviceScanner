@@ -12,16 +12,16 @@
 
         <div class="row device-card-details">
             <div class="col-lg-6">
-                <i class="fas fa-clock"></i>
+                <i title="Last seen" class="fas fa-clock"></i>
                 <abbr title="@DeviceCardVm?.LastSeenAt">@DeviceCardVm?.LastSeenAt.Humanize()</abbr>
             </div>
             <div class="col-lg-6 @(HostNameSeen == false ? "text-muted" : string.Empty)">
-                <i class="fas fa-tag"></i>
+                <i title="Last seen host name" class="fas fa-tag"></i>
                 @(HostNameSeen ? DeviceCardVm?.LastSeenHostName : "No host name seen")
             </div>
 
-            <div class="col-lg-6"><i class="fas fa-grip-horizontal"></i> @DeviceCardVm?.LastSeenIp</div>
-            <div class="col-lg-6"><i class="fas fa-ethernet"></i> @DeviceCardVm?.MacAddress</div>
+            <div class="col-lg-6"><i title="Last seen IPv4 address" class="fas fa-grip-horizontal"></i> @DeviceCardVm?.LastSeenIp</div>
+            <div class="col-lg-6"><i title="MAC address" class="fas fa-ethernet"></i> @DeviceCardVm?.MacAddress</div>
         </div>
     </div>
 </div>
