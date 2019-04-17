@@ -29,6 +29,16 @@
         protected string MacAddress { get; set; }
 
         /// <summary>
+        /// Gets a value indicating whether a user defined name has been set for the device.
+        /// </summary>
+        protected bool UserDefinedNameSet => DeviceCardVm.UserDefinedName != null;
+
+        /// <summary>
+        /// Gets a value indicating whether the device is assigned to a profile or not.
+        /// </summary>
+        protected bool ProfileSet => DeviceCardVm.ProfileName != null;
+
+        /// <summary>
         /// Prepares the component.
         /// </summary>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
