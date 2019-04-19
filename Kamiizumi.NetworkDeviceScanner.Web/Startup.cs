@@ -31,7 +31,7 @@
             services.AddMvc()
                 .AddNewtonsoftJson();
 
-            services.AddRazorComponents();
+            services.AddServerSideBlazor();
 
             services.AddScoped<ProfileService>();
             services.AddScoped<DeviceService>();
@@ -60,10 +60,11 @@
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
-            app.UseRouting(routes =>
+            app.UseRouting();
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRazorPages();
-                routes.MapComponentHub<App>("app");
+                endpoints.MapRazorPages();
+                endpoints.MapBlazorHub<App>("app");
             });
 
             using (var serviceScope = app.ApplicationServices
