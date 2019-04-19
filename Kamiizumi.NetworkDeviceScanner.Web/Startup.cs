@@ -28,10 +28,8 @@
             services.AddDbContext<NetworkDeviceScannerContext>(options =>
                 options.UseSqlite("Data Source=NetworkDeviceScanner.db"));
 
-            services.AddMvc()
-                .AddNewtonsoftJson();
-
-            services.AddRazorComponents();
+            services.AddRazorPages();
+            services.AddServerSideBlazor();
 
             services.AddScoped<ProfileService>();
             services.AddScoped<DeviceService>();
@@ -60,10 +58,11 @@
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
-            app.UseRouting(routes =>
+            app.UseRouting();
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRazorPages();
-                routes.MapComponentHub<App>("app");
+                endpoints.MapBlazorHub();
+                endpoints.MapFallbackToPage("/_Host");
             });
 
             using (var serviceScope = app.ApplicationServices
