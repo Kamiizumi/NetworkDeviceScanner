@@ -12,6 +12,7 @@
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+    using Microsoft.Extensions.Options;
     using NmapXmlParser;
 
     /// <summary>
@@ -21,13 +22,17 @@
     {
         private readonly IServiceScopeFactory _scopeFactory;
 
+        private readonly NetworkDeviceScannerOptions _networkDeviceScannerOptions;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DeviceScannerService"/> class.
         /// </summary>
         /// <param name="scopeFactory">Factory for getting services.</param>
-        public DeviceScannerService(IServiceScopeFactory scopeFactory)
+        /// <param name="options">Application options.</param>
+        public DeviceScannerService(IServiceScopeFactory scopeFactory, IOptions<NetworkDeviceScannerOptions> options)
         {
             _scopeFactory = scopeFactory;
+            _networkDeviceScannerOptions = options.Value;
         }
 
         /// <summary>
@@ -47,7 +52,7 @@
                     {
                         // Configure the executable / arguments to start.
                         nmapProcess.StartInfo.FileName = "nmap";
-                        nmapProcess.StartInfo.Arguments = "-sn 192.168.1.0/24 -oX -";
+                        nmapProcess.StartInfo.Arguments = $"-sn {_networkDeviceScannerOptions.TargetSpecification} -oX -";
 
                         // We want to handle the process internally so don't start via the OS.
                         nmapProcess.StartInfo.UseShellExecute = false;
