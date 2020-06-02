@@ -8,8 +8,12 @@ Network Device Scanner is a web application that scans and logs active hosts on 
 - [.NET Core SDK 3.0](https://dotnet.microsoft.com/download/dotnet-core/3.0) or greater
 - [Nmap](https://nmap.org/) installed and on the path
     > This can be tested by running `nmap` at a terminal. Nmap's help should be displayed.
-- Local network on the 10.0.0.0/24 subnet
-    > *The subnet being scanned is currently hard-coded.*
+
+## Configuration
+
+The application needs to be configured before being used. Configuration is handled via the standard ASP.NET Core configuration patterns, so can be provided via appsettings files or environment variables. The following settings must be configured before use:
+
+- `TargetSpecification` - The subnet to scan (e.g. `192.168.1.0/24`)
 
 ## Usage
 

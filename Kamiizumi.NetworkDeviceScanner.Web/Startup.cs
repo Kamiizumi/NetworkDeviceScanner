@@ -7,6 +7,7 @@
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
 
@@ -15,6 +16,20 @@
     /// </summary>
     public class Startup
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Startup"/> class.
+        /// </summary>
+        /// <param name="configuration">Application configuration.</param>
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+
+        /// <summary>
+        /// Gets the application configuration.
+        /// </summary>
+        public IConfiguration Configuration { get; }
+
         /// <summary>
         /// Configures services used throughout the application.
         /// </summary>
@@ -25,6 +40,8 @@
         /// </remarks>
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<NetworkDeviceScannerOptions>(Configuration);
+
             services.AddDbContext<NetworkDeviceScannerContext>(options =>
                 options.UseSqlite("Data Source=Data/NetworkDeviceScanner.db"));
 
