@@ -9,4 +9,5 @@ FROM mcr.microsoft.com/dotnet/core/aspnet:3.0.0-preview5
 RUN apt update && apt install -y nmap
 WORKDIR /app
 COPY --from=build-env /app/out .
+RUN mkdir Data
 ENTRYPOINT ["dotnet", "Kamiizumi.NetworkDeviceScanner.Web.dll"]

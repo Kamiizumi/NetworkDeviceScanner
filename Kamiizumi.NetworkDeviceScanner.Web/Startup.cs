@@ -26,7 +26,7 @@
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<NetworkDeviceScannerContext>(options =>
-                options.UseSqlite("Data Source=NetworkDeviceScanner.db"));
+                options.UseSqlite("Data Source=Data/NetworkDeviceScanner.db"));
 
             services.AddRazorPages();
             services.AddServerSideBlazor();
