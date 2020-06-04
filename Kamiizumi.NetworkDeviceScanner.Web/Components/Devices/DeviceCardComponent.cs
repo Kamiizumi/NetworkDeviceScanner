@@ -47,7 +47,7 @@
         /// Prepares the component.
         /// </summary>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        protected override async Task OnInitAsync()
+        protected override async Task OnInitializedAsync()
         {
             DeviceCardVm = await DeviceService
                 .Get()

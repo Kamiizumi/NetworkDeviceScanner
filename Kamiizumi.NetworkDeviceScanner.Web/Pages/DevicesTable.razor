@@ -71,11 +71,11 @@
     </tbody>
 </table>
 
-@functions
+@code
 {
     IEnumerable<Device> devices;
 
-    protected override async Task OnInitAsync()
+    protected override async Task OnInitializedAsync()
     {
         devices = NetworkDeviceScannerContext.Devices.Include(a => a.Profile).OrderByDescending(a => a.LastSeenAt);
     }

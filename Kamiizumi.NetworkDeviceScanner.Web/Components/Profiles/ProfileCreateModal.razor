@@ -1,6 +1,6 @@
 ﻿@inject IJSRuntime JSRuntime
 @inject Kamiizumi.NetworkDeviceScanner.Services.ProfileService ProfileService
-@inject Microsoft.AspNetCore.Components.IUriHelper UriHelper
+@inject NavigationManager NavigationManager
 
 <div class="modal fade" id="ProfileCreateModal" tabindex="-1" role="dialog" aria-labelledby="profileCreateModalTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -21,7 +21,7 @@
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" onclick="@OnCreate">Create</button>
+                <button type="button" class="btn btn-primary" @onclick="OnCreate">Create</button>
             </div>
         </div>
     </div>
@@ -29,13 +29,13 @@
 
 
 
-@functions
+@code
 {
     string newName;
 
-    protected override void OnAfterRender()
+    protected override void OnAfterRender(bool firstRender)
     {
-        base.OnAfterRender();
+        base.OnAfterRender(firstRender);
         try
         {
             JSRuntime.InvokeAsync<string>("initAutoFocusOnModalOpen", "ProfileCreateModal", "ProfileCreateName");
@@ -43,12 +43,13 @@
         catch (InvalidOperationException)
         {
             // No-op until I figure out what causes the above line to throw on page reload.
+            // TODO: Check if can use firstRender to deal with this.
         }
     }
 
     void OnCreate()
     {
         ProfileService.Create(newName).Wait();
-        UriHelper.NavigateTo("/profiles", true);
+        NavigationManager.NavigateTo("/profiles", true);
     }
 }
