@@ -2,7 +2,7 @@
 @inherits Kamiizumi.NetworkDeviceScanner.Web.Components.Profiles.ProfileTableComponent
 @using Kamiizumi.NetworkDeviceScanner.Web.Components.Profiles
 @inject Kamiizumi.NetworkDeviceScanner.Services.ProfileService ProfileService
-@inject Microsoft.AspNetCore.Components.IUriHelper UriHelper
+@inject NavigationManager NavigationManager
 
 <div class="container">
     <div class="row justify-content-md-center">
@@ -25,7 +25,7 @@
                                 </div>
 
                                 <p class="align-self-center mb-0">
-                                    <button class="btn btn-danger" onclick="@(() => OnDelete(profile.Id))">Delete</button>
+                                    <button class="btn btn-danger" @onclick="(() => OnDelete(profile.Id))">Delete</button>
                                 </p>
                             </div>
                         </li>
@@ -53,6 +53,6 @@
     async Task OnDelete(int profileId)
     {
         await ProfileService.Delete(profileId);
-        UriHelper.NavigateTo("/profiles", true);
+        NavigationManager.NavigateTo("/profiles", true);
     }
 }
