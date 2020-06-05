@@ -12,6 +12,12 @@
     public class DeviceCardComponent : ComponentBase
     {
         /// <summary>
+        /// Gets or sets the MAC address of the device the card is for.
+        /// </summary>
+        [Parameter]
+        public string MacAddress { get; set; }
+
+        /// <summary>
         /// Gets or sets the service to access devices with.
         /// </summary>
         [Inject]
@@ -21,12 +27,6 @@
         /// Gets the view model containing device details.
         /// </summary>
         protected DeviceCardVm DeviceCardVm { get; private set; }
-
-        /// <summary>
-        /// Gets or sets the MAC address of the device the card is for.
-        /// </summary>
-        [Parameter]
-        protected string MacAddress { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether a user defined name has been set for the device.
@@ -47,7 +47,7 @@
         /// Prepares the component.
         /// </summary>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        protected override async Task OnInitAsync()
+        protected override async Task OnInitializedAsync()
         {
             DeviceCardVm = await DeviceService
                 .Get()

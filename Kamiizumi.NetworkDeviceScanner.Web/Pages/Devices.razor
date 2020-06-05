@@ -1,4 +1,5 @@
 ﻿@page "/devices"
+
 @using Kamiizumi.NetworkDeviceScanner.Data.Models
 @using Kamiizumi.NetworkDeviceScanner.Web.Components.Devices
 @using Microsoft.EntityFrameworkCore
@@ -19,12 +20,12 @@
     </p>
 </div>
 
-@functions
+@code
 {
     IEnumerable<Device> devices;
 
-    protected override async Task OnInitAsync()
+    protected override async Task OnInitializedAsync()
     {
-        devices = NetworkDeviceScannerContext.Devices.Include(a => a.Profile).OrderByDescending(a => a.LastSeenAt);
+        devices = NetworkDeviceScannerContext.Devices.Include(a => a.Profile).ToList().OrderByDescending(a => a.LastSeenAt);
     }
 }

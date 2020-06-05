@@ -1,4 +1,5 @@
 ﻿@page "/devicesTable"
+
 @using Kamiizumi.NetworkDeviceScanner.Data.Models
 @using Microsoft.EntityFrameworkCore
 @inject Kamiizumi.NetworkDeviceScanner.Data.NetworkDeviceScannerContext NetworkDeviceScannerContext
@@ -47,7 +48,7 @@
                             device.MacAddress.Substring(10, 2))
                     </td>
                     <td>
-                        <select class="form-control" onchange="@((e) => SetProfile(e, device.MacAddress))">
+                        <select class="form-control" @onchange="((e) => SetProfile(e, device.MacAddress))">
                             <option></option>
                             @foreach(var profile in NetworkDeviceScannerContext.Profiles.OrderBy(profile => profile.Name))
                             {
@@ -60,7 +61,7 @@
                         </select>
                     </td>
                     <td>
-                        <input class="form-control" type="text" maxlength="255" value="@device.UserDefinedName" onchange="@((e) => SetName(e, device.MacAddress))" />
+                        <input class="form-control" type="text" maxlength="255" value="@device.UserDefinedName" @onchange="((e) => SetName(e, device.MacAddress))" />
                     </td>
                     <td>@device.LastSeenIp</td>
                     <td>@device.LastSeenHostName</td>
@@ -71,21 +72,21 @@
     </tbody>
 </table>
 
-@functions
+@code
 {
     IEnumerable<Device> devices;
 
-    protected override async Task OnInitAsync()
+    protected override async Task OnInitializedAsync()
     {
-        devices = NetworkDeviceScannerContext.Devices.Include(a => a.Profile).OrderByDescending(a => a.LastSeenAt);
+        devices = NetworkDeviceScannerContext.Devices.Include(a => a.Profile).ToList().OrderByDescending(a => a.LastSeenAt);
     }
 
-    private void SetProfile(UIChangeEventArgs ev, string macAddress)
+    private void SetProfile(ChangeEventArgs ev, string macAddress)
     {
         DeviceService.SetProfile(macAddress, Convert.ToInt32(ev.Value));
     }
 
-    private void SetName(UIChangeEventArgs ev, string macAddress)
+    private void SetName(ChangeEventArgs ev, string macAddress)
     {
         DeviceService.SetUserDefinedName(macAddress, ev.Value.ToString());
     }
