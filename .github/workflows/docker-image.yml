@@ -16,3 +16,9 @@ jobs:
     - uses: actions/checkout@v2
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag network-device-scanner:$(date +%s)
+    - uses: docker/build-push-action@v1
+      with:
+        username: kamiizumi
+        password: ${{ secrets.DOCKERHUB_PAT }}
+        repository: kamiizumi/network-device-scanner
+        tags: latest
