@@ -69,6 +69,9 @@ RUN apt-get update \
         && apt-get install -y azure-cli; \
     fi \
     #
+    # Install nmap (required to scan network for devices)
+    && apt-get -y install nmap \
+    #
     # Clean up
     && apt-get autoremove -y \
     && apt-get clean -y \
