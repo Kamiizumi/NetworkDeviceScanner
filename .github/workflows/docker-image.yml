@@ -22,4 +22,3 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PAT }}
         repository: kamiizumi/network-device-scanner
         tags: latest
-        push: ${{ github.ref == 'ref/head/master' }}
